@@ -19,3 +19,8 @@ doc("courses.xml")//Course[data(@Enrollment > 500)]/Title
 for $d in doc("courses.xml")//Department
 where $d/Course/Prerequisites/Prereq = "CS106B"
 return $d/Title
+
+(:============================================================
+  Q5: Return last names of all professors or lecturers who use a middle initial. Don't worry about eliminating duplicates.
+==============================================================:)
+doc("courses.xml")//(Professor|Lecturer)[Middle_Initial]/Last_Name
