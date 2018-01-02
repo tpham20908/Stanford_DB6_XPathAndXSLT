@@ -24,3 +24,8 @@ return $d/Title
   Q5: Return last names of all professors or lecturers who use a middle initial. Don't worry about eliminating duplicates.
 ==============================================================:)
 doc("courses.xml")//(Professor|Lecturer)[Middle_Initial]/Last_Name
+
+(:============================================================
+  Q6: Return the count of courses that have a cross-listed course (i.e., that have "Cross-listed" in their description).
+==============================================================:)
+count(doc("courses.xml")//Course[contains(Description, "Cross-listed")])
