@@ -27,3 +27,9 @@ Q5: Return titles of courses taught by the chair of a department. For this quest
 ***************************************************************:)
 doc("courses.xml")//Course[Instructors/Professor/Last_Name =
   parent::*/Chair/Professor/Last_Name]/Title
+
+(:***************************************************************
+Q6: Return titles of courses that have both a lecturer and a professor as instructors. Return each title only once.
+***************************************************************:)
+doc("courses.xml")//Course[count(Instructors/Professor) > 0 and
+  count(Instructors/Lecturer) > 0]/Title
