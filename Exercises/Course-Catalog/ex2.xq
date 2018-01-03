@@ -10,9 +10,14 @@ doc("courses.xml")//Course[
   Title = following::*/Title or Title = preceding::*/Title
   ]/data(@Number)
 
-  (:***************************************************************
-  Q3: Return course numbers of courses taught by an instructor with first name "Daphne" or "Julie".
+(:***************************************************************
+Q3: Return course numbers of courses taught by an instructor with first name "Daphne" or "Julie".
 ***************************************************************:)
 doc("courses.xml")//Course[
   Instructors/(Lecturer|Professor)/First_Name = "Daphne" or
   Instructors/(Lecturer|Professor)/First_Name = "Julie"]/data(@Number)
+
+(:***************************************************************
+Q4: Return the number (count) of courses that have no lecturers as instructors.
+***************************************************************:)
+count(doc("courses.xml")//Course[count(Instructors/Lecturer) = 0])
