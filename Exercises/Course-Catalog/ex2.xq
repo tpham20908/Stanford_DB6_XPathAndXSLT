@@ -39,3 +39,14 @@ Q7: Return titles of courses taught by a professor with the last name "Ng" but n
 ***************************************************************:)
 doc("courses.xml")//Course[Instructors/Professor/Last_Name = "Ng" and
   count(Instructors/Professor[Last_Name = "Thrun"]) = 0]/Title
+
+(:***************************************************************
+Q8: Return course numbers of courses that have a course taught by Eric Roberts as a prerequisite.
+***************************************************************:)
+doc("courses.xml")//Course[
+  Prerequisites/Prereq =
+    doc("courses.xml")//Course[
+      Instructors/Professor[First_Name = "Eric" and
+      Last_Name = "Roberts"]
+      ]/data(@Number)
+  ]/data(@Number)
