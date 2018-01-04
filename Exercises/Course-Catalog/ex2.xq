@@ -64,3 +64,19 @@ Q9: Create a summary of CS classes: List all CS department courses in order of e
     </Course>
 }
 </Summary>
+
+(:***************************************************************
+Q10: Return a "Professors" element that contains as subelements a listing of all professors in all departments, sorted by last name with each professor appearing once. The "Professor" subelements should have the same structure as in the original data. For this question, you may assume that all professors have distinct last names. Watch out -- the presence/absence of middle initials may require some special handling. (This problem is quite challenging; congratulations if you get it right.)
+***************************************************************:)
+<Professors>{
+  for $ln in distinct-values(doc("courses.xml")//Professor/Last_Name)
+  for $fn in distinct-values(doc("courses.xml")//Professor[Last_Name = $ln]/First_Name)
+  order by $ln
+  return
+    <Professor>
+      <First_Name>{$fn}</First_Name>
+      {for $mi in doc("courses.xml")//Professor[Last_Name = $ln]/Middle_Initial
+       return $mi}
+      <Last_Name>{$ln}</Last_Name>
+    </Professor>
+}</Professors>
