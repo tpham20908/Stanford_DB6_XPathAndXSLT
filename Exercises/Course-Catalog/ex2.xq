@@ -33,3 +33,9 @@ Q6: Return titles of courses that have both a lecturer and a professor as instru
 ***************************************************************:)
 doc("courses.xml")//Course[count(Instructors/Professor) > 0 and
   count(Instructors/Lecturer) > 0]/Title
+
+(:***************************************************************
+Q7: Return titles of courses taught by a professor with the last name "Ng" but not by a professor with the last name "Thrun".
+***************************************************************:)
+doc("courses.xml")//Course[Instructors/Professor/Last_Name = "Ng" and
+  count(Instructors/Professor[Last_Name = "Thrun"]) = 0]/Title
