@@ -80,3 +80,29 @@ Q10: Return a "Professors" element that contains as subelements a listing of all
       <Last_Name>{$ln}</Last_Name>
     </Professor>
 }</Professors>
+
+(:***************************************************************
+Q11: Expanding on the previous question, create an inverted course listing: Return an "Inverted_Course_Catalog" element that contains as subelements professors together with the courses they teach, sorted by last name. You may still assume that all professors have distinct last names. The "Professor" subelements should have the same structure as in the original data, with an additional single "Courses" subelement under Professor, containing a further "Course" subelement for each course number taught by that professor. Professors who do not teach any courses should have no Courses subelement at all. (This problem is very challenging; extra congratulations if you get it right.)
+***************************************************************:)
+<Inverted_Course_Catalog>{
+  for $ln in distinct-values(doc("courses.xml")//Professor/Last_Name)
+  for $fn in distinct-values(doc("courses.xml")//Professor[Last_Name = $ln]/First_Name)
+  order by $ln
+  return
+    <Professor>
+      <First_Name>{$fn}</First_Name>
+      {for $mi in doc("courses.xml")//Professor[Last_Name = $ln]/Middle_Initial
+       return $mi}
+      <Last_Name>{$ln}</Last_Name>
+      {for $p in distinct-values(
+        doc("courses.xml")//Course/Instructors/Professor[Last_Name = $ln])
+       where count($p) != 0
+       return
+       <Courses>{
+        for $c in doc("courses.xml")//Course
+        where $c/Instructors/Professor/Last_Name = $ln
+        return
+        <Course>{$c/data(@Number)}</Course>
+       }</Courses>}
+    </Professor>
+}</Inverted_Course_Catalog>
