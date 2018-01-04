@@ -50,3 +50,17 @@ doc("courses.xml")//Course[
       Last_Name = "Roberts"]
       ]/data(@Number)
   ]/data(@Number)
+
+(:***************************************************************
+Q9: Create a summary of CS classes: List all CS department courses in order of enrollment. For each course include only its Enrollment (as an attribute) and its Title (as a subelement).
+***************************************************************:)
+<Summary>
+{ for $cs in doc("courses.xml")//Department[@Code = "CS"]/Course
+  order by xs:int($cs/@Enrollment)
+  return
+    <Course>
+      {$cs/@Enrollment}
+      {$cs/Title}
+    </Course>
+}
+</Summary>
