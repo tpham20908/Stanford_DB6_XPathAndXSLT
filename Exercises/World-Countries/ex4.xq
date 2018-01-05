@@ -181,3 +181,29 @@ return
   <country name = "{$c/data(@name)}">
     {$c/language}
   </country>
+
+(:***********************************************************************
+Q20: Return all countries where at least one language is listed, and
+every listed language is spoken by less than 20% of the population.
+Return the country element with its name attribute and its language
+subelements, but no other attributes or subelements.
+***********************************************************************:)
+for $c in doc("countries.xml")//country[count(language) > 0 and
+  count(language[@percentage >= 20]) = 0]
+return
+  <country name = "{$c/data(@name)}">
+    {$c/language}
+  </country>
+
+(:***********************************************************************
+Q21: Find all situations where one country's most popular language is
+another country's least popular, and both countries list more than one
+language. (Hint: You may need to explicitly cast percentages as
+floating-point numbers with xs:float() to get the correct answer.)
+Return the name of the language and the two countries, each in the
+format:
+<LangPair language="lang-name">
+  <MostPopular>country-name</MostPopular>
+  <LeastPopular>country-name</LeastPopular>
+</LangPair>
+***********************************************************************:)
