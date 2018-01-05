@@ -207,3 +207,16 @@ format:
   <LeastPopular>country-name</LeastPopular>
 </LangPair>
 ***********************************************************************:)
+for $c1 in doc("countries.xml")//country[count(language) > 1]
+for $c2 in doc("countries.xml")//country[count(language) > 1]
+for $l1 in $c1/language
+for $l2 in $c2/language
+where $l1 = $l2 and
+  $c1/@name != $c2/@name and
+  xs:float($l1/@percentage) = xs:float(max($c1/language/@percentage)) and
+  xs:float($l2/@percentage) = xs:float(min($c2/language/@percentage))
+return
+  <LangPair language = "{$l2}">
+    <MostPopular>{$c1/data(@name)}</MostPopular>
+    <LeastPopular>{$c2/data(@name)}</LeastPopular>
+  </LangPair>
