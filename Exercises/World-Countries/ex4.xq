@@ -89,3 +89,95 @@ data(.), which returns the text value of the "current element" within an
 XPath expression.)
 ***********************************************************************:)
 doc("countries.xml")//country/language[contains(parent::*/data(@name), data(.))]/data(.)
+
+(:***********************************************************************
+Q11: Return all languages whose name textually contains the name of a
+country in which the language is spoken. For instance, Icelandic is
+spoken in Iceland, so return Icelandic. (Hint: Depending on your
+solution, may want to use data(.), which returns the text value of the
+"current element" within an XPath expression.)
+***********************************************************************:)
+doc("countries.xml")//country/language[contains(data(.), parent::*/data(@name))]/data(.)
+
+(:***********************************************************************
+Q12: Return the number of countries where Russian is spoken.
+***********************************************************************:)
+count(doc("countries.xml")//country[language = "Russian"])
+
+(:***********************************************************************
+Q13: Return the names of all countries for which the data does not
+include any languages or cities, but the country has more than 10
+million people.
+***********************************************************************:)
+doc("countries.xml")//country[
+  @population > 10000000 and
+  count(language) = 0 and
+  count(city) = 0]/data(@name)
+
+(:***********************************************************************
+Q14: Return the name of the country with the highest population. (Hint:
+You may need to explicitly cast population numbers as integers with
+xs:int() to get the correct answer.)
+***********************************************************************:)
+doc("countries.xml")//country[@population =
+  max(doc("countries.xml")//country/data(@population))
+  ]/data(@name)
+
+(:***********************************************************************
+Q15: Return the name of the country that has the city with the highest
+population. (Hint: You may need to explicitly cast population numbers as
+integers with xs:int() to get the correct answer.)
+***********************************************************************:)
+doc("countries.xml")//country[city/population =
+  max(doc("countries.xml")//country/city/population)
+  ]/data(@name)
+
+(:***********************************************************************
+Q16: Return the average number of languages spoken in countries where
+Russian is spoken.
+***********************************************************************:)
+count(doc("countries.xml")//country[language = "Russian"]/language) div
+count(doc("countries.xml")//country[language = "Russian"])
+
+(:***********************************************************************
+Q17: Return all country-language pairs where the language is spoken in
+the country and the name of the country textually contains the language
+name. Return each pair as a country element with language attribute,
+e.g.,
+<country language="French">French Guiana</country>
+***********************************************************************:)
+for $c in doc("countries.xml")//country
+for $l in $c/language
+where contains($c/@name, $l)
+return <country language="{$l}">{$c/data(@name)}</country>
+
+(:***********************************************************************
+Q18: Return all countries that have at least one city with population
+greater than 7 million. For each one, return the country name along with
+the cities greater than 7 million, in the format:
+<country name="country-name">
+  <big>city-name</big>
+  <big>city-name</big>
+  ...
+</country>
+***********************************************************************:)
+for $country in doc("countries.xml")//country[count(city[population > 7000000]) > 0]
+return
+  <country name = "{$country/data(@name)}">{
+    for $city in $country/city
+    where $city/population > 7000000
+    return
+    <big>{$city/data(name)}</big>
+  }</country>
+
+(:***********************************************************************
+Q19: Return all countries where at least one language is listed, but the
+total percentage for all listed languages is less than 90%. Return the
+country element with its name attribute and its language subelements,
+but no other attributes or subelements.
+***********************************************************************:)
+for $c in doc("countries.xml")//country[count(language) > 0 and sum(language/@percentage) < 90]
+return
+  <country name = "{$c/data(@name)}">
+    {$c/language}
+  </country>
