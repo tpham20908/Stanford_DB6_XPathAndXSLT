@@ -48,3 +48,44 @@ for $city1 in doc("countries.xml")//city
 for $city2 in doc("countries.xml")//city
 where $city1/name = $city2/name and $city1[parent::*/@name] < $city2[parent::*/@name]
 return $city1/name
+
+(:***********************************************************************
+Q7: Return the names of all countries containing a city such that some
+other country has a city of the same name. (Hint: You might want to use
+the "preceding" and/or "following" navigation axes for this query, which
+were not covered in the video or our demo script; they match any
+preceding or following node, not just siblings.)
+***********************************************************************:)
+for $c1 in doc("countries.xml")//country
+for $c2 in doc("countries.xml")//country
+where $c1/city/name = $c2/city/name and $c1/@name != $c2/@name
+return $c1/data(@name)
+
+(:***********************************************************************
+Q8: Return the names of all countries whose name textually contains a
+language spoken in that country. For instance, Uzbek is spoken in
+Uzbekistan, so return Uzbekistan. (Hint: You may want to use ".", which
+refers to the "current element" within an XPath expression.)
+***********************************************************************:)
+for $c in doc("countries.xml")//country
+where some $l in $c/language satisfies contains($c/@name, $l)
+return $c/data(@name)
+
+(:***********************************************************************
+Q9: Return the names of all countries in which people speak a language
+whose name textually contains the name of the country. For instance,
+Japanese is spoken in Japan, so return Japan. (Hint: You may want to use
+".", which refers to the "current element" within an XPath expression.)
+***********************************************************************:)
+for $c in doc("countries.xml")//country
+where some $l in $c/language satisfies contains($l, $c/@name)
+return $c/data(@name)
+
+(:***********************************************************************
+Q10: Return all languages spoken in a country whose name textually
+contains the language name. For instance, German is spoken in Germany,
+so return German. (Hint: Depending on your solution, may want to use
+data(.), which returns the text value of the "current element" within an
+XPath expression.)
+***********************************************************************:)
+doc("countries.xml")//country/language[contains(parent::*/data(@name), data(.))]/data(.)
