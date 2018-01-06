@@ -8,7 +8,7 @@
                   Price CDATA #REQUIRED
                   Edition CDATA #IMPLIED>
    <!ELEMENT Magazine (Title)>
-   <!ATTLIST Magazine Month CDATA #REQUIRED Year CDATA #REQUIRED> 
+   <!ATTLIST Magazine Month CDATA #REQUIRED Year CDATA #REQUIRED>
    <!ELEMENT Title (#PCDATA)>
    <!ELEMENT Authors (Author+)>
    <!ELEMENT Remark (#PCDATA)>
@@ -84,6 +84,5 @@
        <Title>Newsweek</Title>
    </Magazine>
    <Magazine Month="March" Year="2009">
-       <Title>Hector and Jeff's Database Hints</Title>
    </Magazine>
 </Bookstore>
