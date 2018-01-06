@@ -220,3 +220,36 @@ return
     <MostPopular>{$c1/data(@name)}</MostPopular>
     <LeastPopular>{$c2/data(@name)}</LeastPopular>
   </LangPair>
+
+(:***********************************************************************
+Q22: For each language spoken in one or more countries, create a
+"language" element with a "name" attribute and one "country" subelement
+for each country in which the language is spoken. The "country"
+subelements should have two attributes: the country "name", and
+"speakers" containing the number of speakers of that language (based on
+language percentage and the country's population). Order the result by
+language name, and enclose the entire list in a single "languages"
+element. For example, your result might look like:
+<languages>
+  ...
+  <language name="Arabic">
+    <country name="Iran" speakers="660942"/>
+    <country name="Saudi Arabia" speakers="19409058"/>
+    <country name="Yemen" speakers="13483178"/>
+  </language>
+  ...
+</languages>
+***********************************************************************:)
+<languages>{
+for $lang in distinct-values(doc("countries.xml")//country/language)
+order by $lang
+return
+  <language name="{$lang}">{
+    for $c in doc("countries.xml")//country[language = $lang]
+    for $l in $c/language
+    let $speakers := $l/@percentage * $c/@population div 100
+    where $l = $lang
+    return
+    <country name="{$c/@name}" speakers="{xs:int($speakers)}"></country>
+  }</language>
+}</languages>
